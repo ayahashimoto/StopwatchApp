@@ -22,6 +22,9 @@ NSTimer *timer;
 // カウント用の変数
 NSInteger countNumber;
 
+    UIButton *button;
+    UIButton *sbutton;
+    UIButton *rbutton;
 }
 
 @end
@@ -33,21 +36,10 @@ NSInteger countNumber;
 -(void)viewDidLoad{
     [super viewDidLoad];
     [self setupParts];    // ラベルとイメージビューを作成するメソッドを呼び出す
-    [self buttonchange];
     countNumber = 0;     //カウント用の変数に0を代入
     // タイマーインスタンスを作成 1秒ごとによびだす
     }
 
-
-
-//　ボタンを切り替える？　途中です
--(void)buttonchange{
-    if (![timer isValid]) {
-             NSLog(@"とまってる");
-      } else {
-          NSLog(@"うごいてる");
-}
-}
 
 
 //　※一秒ごとに呼び出されるメソッド
@@ -55,8 +47,8 @@ NSInteger countNumber;
     countNumber++;
     NSLog(@"%d:%d", countNumber /60,countNumber %60);
     timeLabel.text = [NSString stringWithFormat:@"%02d:%02d", countNumber /60,countNumber %60];
-    
 }
+
 
 
 //　※ストップボタン
@@ -64,7 +56,10 @@ NSInteger countNumber;
     if (timer != nil){
         [timer invalidate];
         timer = nil;
-        
+        [self.view addSubview:button];
+        [button setHidden:YES];
+        [self.view addSubview:sbutton];
+        [sbutton setHidden:NO];
     }
 }
 
@@ -72,15 +67,25 @@ NSInteger countNumber;
 //　※スタートボタン
 -(void)timerStart:(id)sender{
   timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(tick:)userInfo:nil repeats:YES];
-          }
+    [self.view addSubview:sbutton];
+     [sbutton setHidden:YES];
+    [self.view addSubview:button];
+     [button setHidden:NO];
+              }
+
 
 //　※リセットボタン
 -(void)timerReset:(id)sender{
    timeLabel.text = @"00:00";
    countNumber = 0;
+    if (timer != nil){
+        [timer invalidate];
+        timer = nil;
+        [self.view addSubview:sbutton];
+        [self.view addSubview:button];
+
+    }
 }
-
-
 
 
 //　※時間の表示設定
@@ -121,7 +126,7 @@ NSInteger countNumber;
     
     
     // ボタンの作成　※停止
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button= [UIButton buttonWithType:UIButtonTypeCustom];
     
     // ボタンの位置を設定
     button.frame = CGRectMake(0, 0, 112, 39);
@@ -139,16 +144,16 @@ NSInteger countNumber;
     
     //ボタンに画像を設定
     [button setImage:[UIImage imageNamed:@"stop.png"] forState:UIControlStateNormal];
-    
+    [button setHidden:YES];
 
     
     
     // ボタンの作成　※スタート
-    UIButton *sbutton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     
     // ボタンの位置を設定
     sbutton.frame = CGRectMake(0, 0, 112, 39);
-    sbutton.center = CGPointMake(160, 370);
+    sbutton.center = CGPointMake(160, 400);
     
     // ボタンのタイトルを設定
     [sbutton setTitle:@"スタート" forState:UIControlStateNormal];
@@ -166,7 +171,7 @@ NSInteger countNumber;
     
     
     // ボタンの作成　※リセット
-    UIButton *rbutton = [UIButton buttonWithType:UIButtonTypeCustom];
+    rbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     
     // ボタンの位置を設定
     rbutton.frame = CGRectMake(0, 0, 112, 39);
@@ -184,6 +189,7 @@ NSInteger countNumber;
     
      //ボタンに画像を設定
     [rbutton setImage:[UIImage imageNamed:@"reset.png"] forState:UIControlStateNormal];
+
 
     
 }
